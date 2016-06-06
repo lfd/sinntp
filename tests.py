@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # encoding=UTF-8
 
 # Copyright © 2011-2012
@@ -18,6 +18,7 @@ try:
 except ImportError:
     import unittest
 
+from importlib import reload
 import os
 
 import utils

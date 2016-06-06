@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # encoding=UTF-8
 
 # Copyright © 2008-2015
@@ -16,7 +16,7 @@
 
 from __future__ import print_function
 
-__author__ = ('Jakub Wilk', 'Piotr Lewandowski')
+__author__ = ['Jakub Wilk', 'Piotr Lewandowski']
 __version__ = '1.5.4'
 
 from nntplib import NNTP, NNTP_PORT, NNTPTemporaryError, NNTPError
@@ -184,7 +184,8 @@ class Pull(Command):
             return
         no = str(i)
         while True:
-            _, _, message_id, body = connection.article(no)
+            _, (_, message_id, body) = connection.article(no)
+            body = [x.decode() for x in body]
             logging.debug('Reading message %s.', message_id)
             yield int(no), body
             try:
@@ -274,7 +275,8 @@ class Get(Command):
 
     def __call__(self, connection):
         logging.debug('Reading message %s.', self.message_id)
-        _, _, _, message = connection.article(self.message_id)
+        _, (_, _, message) = connection.article(self.message_id)
+        message = [x.decode() for x in message]
         message = '\n'.join(message)
         print(message)
 
@@ -301,7 +303,7 @@ class BaseCommand(Command):
         list = List,
     )
 
-    __doc__ = ''.join(command.__doc__.rstrip() for command in COMMANDS.itervalues())
+    __doc__ = ''.join(command.__doc__.rstrip() for command in COMMANDS.values())
 
     def get_option_parser(self):
         oparser = Command.get_option_parser(self)
